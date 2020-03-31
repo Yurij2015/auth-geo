@@ -1,0 +1,60 @@
+version: "3.5"
+services:
+  php_geoauth:
+    build:
+      context: './php/'
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+    networks:
+      - backend
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: php_geoauth
+  apache_geoauth:
+    build:
+      context: './apache/'
+      args:
+        APACHE_VERSION: ${APACHE_VERSION}
+    depends_on:
+      - php_geoauth
+      - mysql_geoauth
+    networks:
+      - frontend
+      - backend
+    ports:
+      - 80:80
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: apache_geoauth
+  mysql_geoauth:
+    image: mysql:5.7
+#    command: >
+#      bash -c "useradd mysql -g mysql
+#      && mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    ports:
+      - 7777:3306
+#    volumes:
+#      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root3004917779
+      MYSQL_USER: geoauth
+      MYSQL_PASSWORD: 3004917779
+      MYSQL_DATABASE: geoauth
+    networks:
+      - backend
+    container_name: mysql_geoauth
+  phpmyadmin_geoauth:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_geoauth
+    ports:
+      - 3666:80
+    links:
+      - mysql_geoauth:db
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+volumes:
+  data:

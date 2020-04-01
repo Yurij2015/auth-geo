@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 services:
   php_geoauth:
     build:
@@ -29,8 +29,7 @@ services:
   mysql_geoauth:
     image: mysql:5.7
 #    command: >
-#      bash -c "useradd mysql -g mysql
-#      && mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
+#      bash -c "mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     ports:
       - 7777:3306

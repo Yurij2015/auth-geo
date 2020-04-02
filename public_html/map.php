@@ -1,4 +1,5 @@
 <!DOCTYPE html >
+<html lang="">
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
@@ -18,8 +19,6 @@
         }
     </style>
 </head>
-
-<html>
 <body>
 <div id="map"></div>
 
@@ -83,7 +82,7 @@
             new XMLHttpRequest;
 
         request.onreadystatechange = function () {
-            if (request.readyState == 4) {
+            if (request.readyState === 4) {
                 request.onreadystatechange = doNothing;
                 callback(request, request.status);
             }
@@ -97,7 +96,7 @@
     }
 </script>
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo&callback=initMap">
 </script>
 </body>
 </html>

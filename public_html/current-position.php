@@ -6,7 +6,80 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
-    <title>Текущее местоположение</title>
+    <!-- Get API key for Google Maps JavaScript API and use it in the place of YOUR-KEY -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo"></script>
+    <script>
+        let watchId, geocoder, startLat, startLong;
+        let start = 1;
+        window.onload = function () {
+            if (navigator.geolocation) {
+                watchId = navigator.geolocation.watchPosition(onSuccess, onError,
+                    {maximumAge: 60 * 1000, timeout: 5 * 60 * 1000, enableHighAccuracy: true});
+            }
+        }
+
+        function onSuccess(position) {
+            let currentLat = position.coords.latitude;
+            let currentLong = position.coords.longitude;
+            if (start === 1) {
+                startLat = currentLat;
+                startLong = currentLong;
+                start = 0;
+            }
+            geocoder = new google.maps.Geocoder();
+            let latlong = new google.maps.LatLng(currentLat, currentLong);
+            geocoder.geocode({'latLng': latlong}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results) {
+                        document.getElementById("location").innerHTML = "Ваше местоположение: " + results[0].formatted_address;
+                    }
+                } else
+                    alert("Could not get the geolocation information");
+            });
+
+            let mapOptions = {
+                center: new google.maps.LatLng(startLat, startLong),
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+
+            let map = new google.maps.Map(document.getElementById("view"), mapOptions);
+            let marker = new google.maps.Marker({
+                position: latlong,
+                map: map,
+                title: "My position",
+                // animation: google.maps.Animation.BOUNCE,
+            });
+
+            let info = new google.maps.InfoWindow({
+                content: "User position!"
+            });
+
+            google.maps.event.addListener(marker, "click", function () {
+                info.open(map, marker);
+            })
+        }
+
+        function onError(error) {
+            switch (error.code) {
+                case PERMISSION_DENIED:
+                    alert("User denied permission");
+                    break;
+                case TIMEOUT:
+                    alert("Geolocation timed out");
+                    break;
+                case POSITION_UNAVAILABLE:
+                    alert("Geolocation information is not available");
+                    break;
+                default:
+                    alert("Unknown error");
+                    break;
+            }
+
+        }
+
+    </script>
+    <title>Озбор местности</title>
 </head>
 <body style="padding-top: 70px">
 <div class="container">
@@ -22,43 +95,12 @@
     </nav>
     <div class="row">
         <div class="col-md-12">
-            <script>
-                function getPosition() {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(successPosition);
-                    } else {
-                        document.getElementById("result").innerHTML = "Ваш браузер не поддерживает определение геолокации!"
-
-                    }
-                }
-
-                function successPosition(position) {
-                    let lat = position.coords.latitude;
-                    let long = position.coords.longitude;
-                    // let time = position.timestamp;
-                    let longlat = lat + "," + long;
-
-                    document.getElementById("result").innerHTML = "Latitude: " + lat + ", Longitude: " + long;
-                    let mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + longlat + "&zoom=17&size=500x500&maptype=hybrid&markers=color:red%7Clabel:I%7C" + longlat + "&key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo";
-
-                    document.getElementById("mycurrentposition").innerHTML = "<img src='" + mapUrl + "'>";
-                    // alert("Accuracy: " + position.coords.accuracy);
-                    // alert("Altitude: " + position.coords.altitude);
-                    // alert("Altitude Accuracy: " + position.coords.altitudeAccuracy);
-                    // alert("Direction: " + position.coords.heading);
-                    // alert("Speed: " + position.coords.speed);
-                    // alert("Timestamp: " + position.timestamp);
-                }
-            </script>
-            <div id="result"></div>
             <hr>
-            <button class="btn btn-primary" id="btnPosition" onclick="getPosition();">Определить мое местоположение
-            </button>
-
+            <div id="location" class="lead"></div>
+            <hr>
+            <div id="view" style="width: 900px; height: 800px;">
+            </div>
         </div>
-    </div>
-    <hr>
-    <div id="mycurrentposition" style="width: 500px; height: 500px;">
     </div>
     <hr>
 </div>

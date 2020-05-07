@@ -8,20 +8,60 @@
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
     <!-- Get API key for Google Maps JavaScript API and use it in the place of YOUR-KEY -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo"></script>
+    <!--    <script>-->
+    <!--        window.onload = function () {-->
+    <!--            navigator.geolocation.getCurrentPosition(function (position) {-->
+    <!--                let lat = position.coords.latitude;-->
+    <!--                let long = position.coords.longitude;-->
+    <!--                let mapOptions = {-->
+    <!--                    center: new google.maps.LatLng(lat, long),-->
+    <!--                    zoom: 13,-->
+    <!--                    mapTypeId: google.maps.MapTypeId.HYBRID-->
+    <!--                };-->
+    <!--                let map = new google.maps.Map(document.getElementById("view"), mapOptions);-->
+    <!--            });-->
+    <!---->
+    <!--        }-->
+    <!--    </script>-->
+
     <script>
         window.onload = function () {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                let lat = position.coords.latitude;
-                let long = position.coords.longitude;
-                let mapOptions = {
-                    center: new google.maps.LatLng(lat, long),
-                    zoom: 13,
-                    mapTypeId: google.maps.MapTypeId.HYBRID
-                };
-                let map = new google.maps.Map(document.getElementById("view"), mapOptions);
-            });
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            }
+        }
+
+        function onSuccess(position) {
+            let currentLat = position.coords.latitude;
+            let currentLong = position.coords.longitude;
+            let latlang = new google.maps.LatLng(currentLat, currentLong);
+            let mapProp = {
+                center: latlang,
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.HYBRID
+            };
+            let map = new google.maps.Map(document.getElementById("view"), mapProp);
 
         }
+
+        function onError(error) {
+            switch (error.code) {
+                case PERMISSION_DENIED:
+                    alert("User denied permission");
+                    break;
+                case TIMEOUT:
+                    alert("Geolocation timed out");
+                    break;
+                case POSITION_UNAVAILABLE:
+                    alert("Geolocation information is not available");
+                    break;
+                default:
+                    alert("Unknown error");
+                    break;
+            }
+
+        }
+
     </script>
     <title>Озбор местности</title>
 </head>

@@ -8,22 +8,6 @@
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
     <!-- Get API key for Google Maps JavaScript API and use it in the place of YOUR-KEY -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo"></script>
-    <!--    <script>-->
-    <!--        window.onload = function () {-->
-    <!--            navigator.geolocation.getCurrentPosition(function (position) {-->
-    <!--                let lat = position.coords.latitude;-->
-    <!--                let long = position.coords.longitude;-->
-    <!--                let mapOptions = {-->
-    <!--                    center: new google.maps.LatLng(lat, long),-->
-    <!--                    zoom: 13,-->
-    <!--                    mapTypeId: google.maps.MapTypeId.HYBRID-->
-    <!--                };-->
-    <!--                let map = new google.maps.Map(document.getElementById("view"), mapOptions);-->
-    <!--            });-->
-    <!---->
-    <!--        }-->
-    <!--    </script>-->
-
     <script>
         window.onload = function () {
             if (navigator.geolocation) {
@@ -35,13 +19,24 @@
             let currentLat = position.coords.latitude;
             let currentLong = position.coords.longitude;
             let latlang = new google.maps.LatLng(currentLat, currentLong);
-            let mapProp = {
+            let mapOptions = {
                 center: latlang,
                 zoom: 13,
                 mapTypeId: google.maps.MapTypeId.HYBRID
             };
-            let map = new google.maps.Map(document.getElementById("view"), mapProp);
-
+            let map = new google.maps.Map(document.getElementById("view"), mapOptions);
+            let marker = new google.maps.Marker({
+                position: new google.maps.LatLng(currentLat, currentLong),
+                map: map,
+                title: "My position",
+                // animation: google.maps.Animation.BOUNCE,
+            });
+            let info = new google.maps.InfoWindow({
+                content: "User position!"
+            });
+            google.maps.event.addListener(marker, "click", function () {
+                info.open(map, marker);
+            })
         }
 
         function onError(error) {

@@ -123,22 +123,25 @@
     <div class="row">
         <div class="col-md-12">
             <h3>Найти поблизости</h3>
-            <label  for="interest"></label><select class="form-control" onchange="getLocations();" id="interest">
+            <label  for="interest">Тип объекта: </label><select class="form-control" onchange="getLocations();" id="interest">
                 <option value="default">Выберите тип объекта</option>
-                <option value="atm">ATM</option>
-                <option value="beauty_salon">Beauty Parlor</option>
-                <option value="church">Church</option>
-                <option value="doctor">Doctor</option>
-                <option value="parking">Parking</option>
-                <option value="library">Library</option>
-                <option value="restaurant">Restaurant</option>
-            </select> в радиусе
-            <label for="distance"></label><select class="form-control" onchange="getLocations();" id="distance">
+                <option value="aquarium">Акваримуы</option>
+                <option value="art_gallery">Арт-галлереи</option>
+                <option value="church">Церкви</option>
+                <option value="city_hall">Ратуша</option>
+                <option value="amusement_park">Парк с атракционами</option>
+                <option value="museum">Музеи</option>
+                <option value="synagogue">Синагога</option>
+                <option value="tourist_attraction">Туристические достопримечательности</option>
+
+
+            </select>
+            <label for="distance">Радиус, м: </label><select class="form-control" onchange="getLocations();" id="distance">
                 <option value="500" selected>500</option>
                 <option value="1000">1000</option>
                 <option value="1500">1500</option>
                 <option value="2000">2000</option>
-            </select> метров <br/>
+            </select>
             <hr>
             <div id="mapArea" style="width:900px;height:900px"></div>
         </div>

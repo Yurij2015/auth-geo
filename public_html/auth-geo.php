@@ -18,7 +18,7 @@
             <p id = "status"></p>
             <a id = "map-link" target="_blank"></a>
 
-
+            <?php echo "Geolocation"; ?>
             <script>
                 function geoFindMe() {
                     const status = document.querySelector('#status');
@@ -49,7 +49,17 @@
     </div>
 
 </div>
-
+<hr>
+<div>
+    <script>
+        if (navigator.geolocation) {
+            alert("geolocation is available");
+        }
+        else {
+            alert("geolocation is not supported");
+        }
+    </script>
+</div>
 </body>
 </html>
 <?php

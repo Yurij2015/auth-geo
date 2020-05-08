@@ -34,8 +34,8 @@ services:
     ports:
       - 7777:3306
     volumes:
-#      - /home/yurij/PhpstormProjects/Volumes/auth-geo-volume:/var/lib/mysql
-      - ./mysql:/var/lib/mysql
+      - /home/yurij/PhpstormProjects/Volumes/auth-geo-volume:/var/lib/mysql
+#      - ./mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root3004917779
       MYSQL_USER: geoauth

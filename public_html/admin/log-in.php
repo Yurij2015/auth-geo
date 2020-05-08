@@ -1,10 +1,28 @@
 <?php
 session_start();
-if (empty($_SESSION['username'])) {
-//  echo "Необходимо войти в систему!";
-  header("Location: /admin/log-in.php");
-
+require_once('../auth/Password.php');
+require_once("../RedBeanPHP5_4_2/rb.php");
+//pass = 12345;
+//user = 'admin';
+$username = $_POST['username'];
+$password = new Password($_POST['password']);
+R::setup('mysql:host=mysql_geoauth;port=3306;dbname=geoauth', 'geoauth', '3004917779');
+$auth = R::findOne('admin_user', ' username = ? ', ["$username"]);
+if ($_POST['submit']) {
+  if ($auth->username == $username and $auth->password == $password) {
+    $_SESSION['username'] = $username;
+    header("Location: /admin/index.php");
+    exit;
+  } else {
+    echo '
+        <div class="alert alert-danger">
+            <strong>Ошибка!</strong> Логин или пароль не верны!
+        </div>
+        ';
+  }
 }
+
+
 ?>
 <!DOCTYPE html>
 <!--
@@ -17,7 +35,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>Admin Panel | Maps</title>
+  <title>Login | Admin Panel | Maps</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
@@ -37,16 +55,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.html" class="nav-link">Главная</a>
+        <a href="index.php" class="nav-link">Главная</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="attracion-admin.php" class="nav-link">Достопримечательности</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="user-admin.php" class="nav-link">Пользователи</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="log-out.php" class="nav-link">Выход <?= "| " . $_SESSION['username'] ?></a>
       </li>
     </ul>
   </nav>
@@ -55,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index.html" class="brand-link">
+    <a href="index.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="Admin Panel" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">AdminPanel</span>
@@ -85,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="index.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Главная</p>
                 </a>
@@ -100,12 +115,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Пользователи</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="log-out.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Выход <?= "| " . $_SESSION['username'] ?></p>
                 </a>
               </li>
             </ul>
@@ -124,12 +133,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Starter Page</h1>
+            <h1 class="m-0 text-dark">Страница входа в систему</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item"><a href="#">Главная</a></li>
+              <li class="breadcrumb-item active">Вход в систему</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -144,15 +153,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
+                <form method="post">
+                  <div class="form-group">
+                    <label for="username" class="float-left">Логин пользователя</label>
+                    <input type="text" class="form-control" name="username" id="username"
+                           placeholder="Ваш логин" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="password" class="float-left">Пароль</label>
+                    <input type="password" class="form-control" name="password" id="password"
+                           placeholder="Пароль" required>
+                  </div>
+                  <input name="submit" type="submit" class="btn btn-danger float-right" value="Войти">
+                </form>
               </div>
             </div>
             <!-- /.card -->

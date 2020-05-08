@@ -13,7 +13,7 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"><a class="navbar-brand" href="#">Navbar</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
                 aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
+                class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent1">
             <ul class="navbar-nav mr-auto">
                 <?php require_once("navigation.php"); ?>

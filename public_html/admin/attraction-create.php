@@ -37,10 +37,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.html" class="nav-link">Главная</a>
+        <a href="index.php" class="nav-link">Главная</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="attracion-admin.php" class="nav-link">Достопримечательности</a>
+        <a href="attracion-admin.php" class="nav-link active">Достопримечательности</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="user-admin.php" class="nav-link">Пользователи</a>
@@ -55,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index.html" class="brand-link">
+    <a href="index.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="Admin Panel" class="brand-image img-circle elevation-3"
            style="opacity: .8">
       <span class="brand-text font-weight-light">AdminPanel</span>
@@ -85,13 +85,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="index.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Главная</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="attracion-admin.php" class="nav-link">
+                <a href="attracion-admin.php" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Объекты в БД</p>
                 </a>
@@ -124,12 +124,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Главная страница</h1>
+            <h1 class="m-0 text-dark">Добавить запись</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Главная</a></li>
-              <li class="breadcrumb-item active">Объекты в базе данных</li>
+              <li class="breadcrumb-item"><a href="index.php">Главная</a></li>
+              <li class="breadcrumb-item active"><a href="attracion-admin.php">Объекты в базе данных</a>
+              </li>
+              <li class="breadcrumb-item active">Добавить запись</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -144,37 +146,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-lg-12">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Список достопримечательностей</h5>
-                <table class="table table-hover">
-                  <thead>
-                  <tr>
-                    <th>№</th>
-                    <th>Наименование</th>
-                    <th>Адрес</th>
-                    <th>Широта</th>
-                    <th>Долгота</th>
-                    <th>Тип</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php
-                  require_once("../RedBeanPHP5_4_2/rb.php");
-                  R::setup('mysql:host=mysql_geoauth;port=3306;dbname=geoauth', 'geoauth', '3004917779');
-                  $markers = R::getAll('SELECT * FROM markers order by name');
-                  foreach ($markers as $marker) {
-                    $id = $marker['id'];
-                    echo "<tr>
-                        <td>" . $id . "</td>
-                        <td>" . $marker['name'] . "</td>
-                        <td>" . $marker['address'] . "</td>
-                        <td>" . $marker['lat'] . "</td>
-                        <td>" . $marker['lng'] . "</td>
-                        <td>" . $marker['type'] . "</td>
-                      </tr>";
-                  }
-                  ?>
-                  </tbody>
-                </table>
+                <form method="post" action="handler-add-attraction.php">
+                  <div class="form-group">
+                    <label for="name">Название</label>
+                    <input type="text" class="form-control" name="name" id="name" value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="address">Адрес</label>
+                    <input type="text" class="form-control" name="address" id="address" value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="lat">Широта</label>
+                    <input type="number" step="any" class="form-control" name="lat" id="lat" value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="lng">Долгота</label>
+                    <input type="number" step="any" class="form-control" name="lng" id="lng" value="">
+                  </div>
+                  <div class="form-group">
+                    <label for="type">Тип</label>
+                    <select type="text" class="form-control" name="type" id="type">
+                      <option value="default">Выберите тип объекта</option>
+                      <option value="aquarium">Акваримуы</option>
+                      <option value="art_gallery">Арт-галлереи</option>
+                      <option value="church">Церкви</option>
+                      <option value="city_hall">Ратуша</option>
+                      <option value="amusement_park">Парк с атракционами</option>
+                      <option value="museum">Музеи</option>
+                      <option value="synagogue">Синагога</option>
+                      <option value="tourist_attraction">Туристические достопримечательности</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-success">Сохранить запись</button>
+                  <a href="attracion-admin.php" class="btn btn-info">Назад</a>
+                </form>
               </div>
             </div>
             <!-- /.card -->
@@ -204,5 +209,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="../js/confirmdelete.js"></script>
 </body>
 </html>

@@ -21,8 +21,6 @@ if ($_POST['submit']) {
         ';
   }
 }
-
-
 ?>
 <!DOCTYPE html>
 <!--

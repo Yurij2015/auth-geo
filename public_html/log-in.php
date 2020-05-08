@@ -31,23 +31,13 @@
 
                     }
                 }
-
                 function successPosition(position) {
                     let lat = position.coords.latitude;
                     let long = position.coords.longitude;
-                    // let time = position.timestamp;
                     let longlat = lat + "," + long;
-
                     document.getElementById("result").innerHTML = "Latitude: " + lat + ", Longitude: " + long;
                     let mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + longlat + "&zoom=17&size=500x500&maptype=hybrid&markers=color:red%7Clabel:I%7C" + longlat + "&key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo";
-
                     document.getElementById("mycurrentposition").innerHTML = "<img src='" + mapUrl + "'>";
-                    // alert("Accuracy: " + position.coords.accuracy);
-                    // alert("Altitude: " + position.coords.altitude);
-                    // alert("Altitude Accuracy: " + position.coords.altitudeAccuracy);
-                    // alert("Direction: " + position.coords.heading);
-                    // alert("Speed: " + position.coords.speed);
-                    // alert("Timestamp: " + position.timestamp);
                 }
             </script>
             <div id="result"></div>

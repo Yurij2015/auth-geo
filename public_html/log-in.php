@@ -10,10 +10,12 @@
 </head>
 <body style="padding-top: 70px">
 <div class="container">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light"><a class="navbar-brand" href="#">Navbar</a>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Geo</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1"
-                aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
+                aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent1">
             <ul class="navbar-nav mr-auto">
                 <?php require_once("navigation.php"); ?>
@@ -27,22 +29,34 @@
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(successPosition);
                     } else {
-                        document.getElementById("result").innerHTML = "Ваш браузер не поддерживает определение геолокации!"
-
+                        document.getElementById("result").innerHTML = "Ваш браузер не поддерживает определение геолокации! Вы не можете войти на сайт."
                     }
                 }
+
                 function successPosition(position) {
                     let lat = position.coords.latitude;
                     let long = position.coords.longitude;
                     let longlat = lat + "," + long;
-                    document.getElementById("result").innerHTML = "Latitude: " + lat + ", Longitude: " + long;
+                    document.getElementById("result").innerHTML = "Latitude: " + lat + ", Longitude: " + long +
+                        "<hr>" +
+                        "<form method='post' action='handlerlogin.php'>" +
+                        "<div class='form-group'> " +
+                        "<label for='email'>Введите адрес эл. почты</label>" +
+                        "<input class='form-control' id='email' name='email'>" +
+                        "</div>" +
+                        "<input hidden name='lat' value='" + lat + "'>" +
+                        "<input hidden name='lng' value='" + long + "'>" +
+                        "<div class='form-group'> " +
+                        "<input class='btn btn-primary' type='submit' value='Войти' '>" +
+                        "</div>" +
+                        "</form>";
                     let mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=" + longlat + "&zoom=17&size=500x500&maptype=hybrid&markers=color:red%7Clabel:I%7C" + longlat + "&key=AIzaSyAOj7WmwEcxrMnABjmJj5gecfI-wGwSiTo";
                     document.getElementById("mycurrentposition").innerHTML = "<img src='" + mapUrl + "'>";
                 }
             </script>
             <div id="result"></div>
             <hr>
-            <button class="btn btn-primary" id="btnPosition" onclick="getPosition();">Определить мое местоположение. Войти на сайт!
+            <button class="btn btn-primary" id="btnPosition" onclick="getPosition();">Определить мое местоположение
             </button>
 
         </div>
@@ -51,8 +65,6 @@
     <div id="mycurrentposition" style="width: 500px; height: 500px;">
     </div>
     <hr>
-    <h2>Для аутентификации это!!!</h2>
-    <p>перенести в sign-in</p>
 </div>
 </body>
 </html>
